@@ -10,43 +10,33 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AnuncioIphone13Pro256gbRouteImport } from './routes/anuncio.iphone-13-pro-256gb'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnuncioIphone13Pro256gbRoute = AnuncioIphone13Pro256gbRouteImport.update({
-  id: '/anuncio/iphone-13-pro-256gb',
-  path: '/anuncio/iphone-13-pro-256gb',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/anuncio/iphone-13-pro-256gb': typeof AnuncioIphone13Pro256gbRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/anuncio/iphone-13-pro-256gb': typeof AnuncioIphone13Pro256gbRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/anuncio/iphone-13-pro-256gb': typeof AnuncioIphone13Pro256gbRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/anuncio/iphone-13-pro-256gb'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/anuncio/iphone-13-pro-256gb'
-  id: '__root__' | '/' | '/anuncio/iphone-13-pro-256gb'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnuncioIphone13Pro256gbRoute: typeof AnuncioIphone13Pro256gbRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,20 +48,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/anuncio/iphone-13-pro-256gb': {
-      id: '/anuncio/iphone-13-pro-256gb'
-      path: '/anuncio/iphone-13-pro-256gb'
-      fullPath: '/anuncio/iphone-13-pro-256gb'
-      preLoaderRoute: typeof AnuncioIphone13Pro256gbRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnuncioIphone13Pro256gbRoute: AnuncioIphone13Pro256gbRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
