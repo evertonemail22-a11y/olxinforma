@@ -319,13 +319,6 @@ function Index() {
           </button>
         </div>
         <div className="bg-muted text-center text-muted-foreground text-sm py-3 mx-4 mt-1 rounded">publicidade</div>
-        <nav className="flex justify-around items-center py-3 bg-black text-white mt-1">
-          <ChevronLeft className="w-6 h-6" />
-          <ChevronRight className="w-6 h-6" />
-          <Home className="w-6 h-6" />
-          <div className="relative"><div className="w-6 h-6 border-2 border-white rounded" /><span className="absolute -top-1 -right-2 text-[10px]">74</span></div>
-          <User className="w-6 h-6" />
-        </nav>
       </div>
     </div>
   );
