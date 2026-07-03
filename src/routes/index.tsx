@@ -41,6 +41,13 @@ function DetailCard({ icon: Icon, label, value }: { icon: any; label: string; va
 function Index() {
   const [showDelivery, setShowDelivery] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<"olx" | "seller">("olx");
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({
+    nome: "", cpf: "", telefone: "", cep: "", rua: "", numero: "", complemento: "", bairro: "", cidade: "", estado: "",
+  });
+  const updateForm = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+  const isFormValid = form.nome && form.cpf && form.telefone && form.cep && form.rua && form.numero && form.bairro && form.cidade && form.estado;
   return (
     <div className="min-h-screen bg-background pb-40">
       {/* Top bar */}
