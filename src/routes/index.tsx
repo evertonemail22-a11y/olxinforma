@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Heart, Share2, Camera, ChevronLeft, ChevronRight, Home, User, Layers,
   ShoppingCart, MessageCircle, Star, Box, Copy, Zap, Award, Building2,
   MapPin, Calendar, CheckCircle2, XCircle, ShieldCheck, CreditCard, Truck,
-  X, Ticket, BadgePercent, Calculator, Facebook, Youtube,
+  X, Ticket, BadgePercent, Calculator, Facebook, Youtube, Info,
 } from "lucide-react";
 import iphoneHero from "@/assets/iphone-hero.jpg";
 import related1 from "@/assets/iphone-related-1.jpg";
