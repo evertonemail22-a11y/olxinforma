@@ -348,15 +348,23 @@ function Index() {
                 <div className="w-20 h-20 shrink-0 rounded-xl bg-[var(--olx-purple-soft)] flex items-center justify-center text-4xl">🚚</div>
                 <div className="flex-1 pt-1">
                   <p className="font-bold text-lg text-foreground">Entrega pela OLX</p>
-                  <p className="text-muted-foreground mt-1">Rua Serranos, 82</p>
-                  <p className="text-muted-foreground">Vila Nova Bonsucesso,...</p>
+                  {form.rua ? (
+                    <>
+                      <p className="text-muted-foreground mt-1">{form.rua}, {form.numero}</p>
+                      <p className="text-muted-foreground">{form.bairro}, {form.cidade} - {form.estado}</p>
+                    </>
+                  ) : (
+                    <p className="text-muted-foreground mt-1 italic">Nenhum endereço cadastrado</p>
+                  )}
                 </div>
                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${deliveryOption === "olx" ? "border-[var(--olx-purple)]" : "border-muted-foreground"}`}>
                   {deliveryOption === "olx" && <div className="w-3.5 h-3.5 rounded-full bg-[var(--olx-purple)]" />}
                 </div>
               </div>
               <div className="h-px bg-border mx-5" />
-              <p className="text-[var(--olx-purple)] font-semibold px-5 py-4">Mudar endereço</p>
+              <p onClick={(e) => { e.stopPropagation(); setShowForm(true); }} className="text-[var(--olx-purple)] font-semibold px-5 py-4 cursor-pointer">
+                {form.rua ? "Alterar endereço" : "Cadastrar endereço"}
+              </p>
             </button>
 
             <button
