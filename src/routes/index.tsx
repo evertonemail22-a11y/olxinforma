@@ -42,6 +42,7 @@ function Index() {
   const [showDelivery, setShowDelivery] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<"olx" | "seller">("olx");
   const [showForm, setShowForm] = useState(false);
+  const [showDeliveryType, setShowDeliveryType] = useState(false);
   const [cepLoading, setCepLoading] = useState(false);
   const [cepError, setCepError] = useState("");
   const [form, setForm] = useState({
