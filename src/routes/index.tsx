@@ -42,6 +42,7 @@ function Index() {
   const [showDelivery, setShowDelivery] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<"olx" | "seller">("olx");
   const [showForm, setShowForm] = useState(false);
+  const [showDeliveryType, setShowDeliveryType] = useState(false);
   const [cepLoading, setCepLoading] = useState(false);
   const [cepError, setCepError] = useState("");
   const [form, setForm] = useState({
@@ -362,7 +363,7 @@ function Index() {
         <div className="bg-muted text-center text-muted-foreground text-sm py-3 mx-4 mt-1 rounded">publicidade</div>
       </div>
 
-      {showDelivery && (
+      {showDelivery && !showDeliveryType && (
         <div className="fixed inset-0 z-50 bg-white flex flex-col overflow-y-auto">
           <button onClick={() => setShowDelivery(false)} className="p-5 self-start">
             <X className="w-7 h-7" />
@@ -435,8 +436,84 @@ function Index() {
           <div className="sticky bottom-0 bg-white px-6 py-4 flex justify-end border-t border-border">
             <button
               disabled={deliveryOption === "olx" && !form.rua}
+              onClick={() => setShowDeliveryType(true)}
               className="bg-[var(--olx-orange)] disabled:opacity-50 text-white font-semibold rounded-full px-10 py-3.5"
             >
+              Continuar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showDeliveryType && (
+        <div className="fixed inset-0 z-50 bg-white flex flex-col overflow-y-auto">
+          <button onClick={() => setShowDeliveryType(false)} className="p-5 self-start">
+            <X className="w-7 h-7" />
+          </button>
+          <div className="px-6 pb-6 flex-1">
+            <h1 className="text-3xl font-bold text-foreground leading-tight">Escolha o tipo de entrega</h1>
+
+            <div className="mt-8 rounded-2xl border border-border p-5 flex items-start gap-3">
+              <MapPin className="w-6 h-6 text-foreground shrink-0 mt-0.5" />
+              <div className="text-foreground text-sm leading-relaxed">
+                {form.rua ? (
+                  <>
+                    {form.rua},{form.numero}{form.complemento ? `,${form.complemento}` : ""},{form.bairro},{form.cidade}-{form.estado}
+                  </>
+                ) : (
+                  "Nenhum endereço cadastrado"
+                )}
+                <button onClick={() => { setShowDeliveryType(false); setShowForm(true); }} className="text-[var(--olx-purple)] font-semibold ml-1 underline">
+                  Mudar endereço
+                </button>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setDeliveryOption("olx")}
+              className={`relative w-full mt-6 rounded-2xl border-2 text-left transition ${deliveryOption === "olx" ? "border-[var(--olx-purple)]" : "border-border"}`}
+            >
+              <div className="p-5 flex items-start gap-4">
+                <div className="w-20 h-20 shrink-0 rounded-xl bg-[var(--olx-purple-soft)] flex items-center justify-center text-4xl">🏠</div>
+                <div className="flex-1 pt-1">
+                  <p className="font-bold text-lg text-foreground">Entrega no endereço</p>
+                  <p className="text-muted-foreground mt-1">Receba o produto no endereço que você escolheu.</p>
+                </div>
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${deliveryOption === "olx" ? "border-[var(--olx-purple)]" : "border-muted-foreground"}`}>
+                  {deliveryOption === "olx" && <div className="w-3.5 h-3.5 rounded-full bg-[var(--olx-purple)]" />}
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setDeliveryOption("seller")}
+              className={`w-full mt-4 rounded-2xl border-2 text-left transition ${deliveryOption === "seller" ? "border-[var(--olx-purple)]" : "border-border"}`}
+            >
+              <div className="p-5 flex items-start gap-4">
+                <div className="w-20 h-20 shrink-0 rounded-xl bg-[var(--olx-purple-soft)] flex items-center justify-center text-4xl">🗄️</div>
+                <div className="flex-1 pt-1">
+                  <p className="font-bold text-lg text-foreground">Armário CliqueRetire</p>
+                  <p className="text-muted-foreground mt-1">Escolha um armário mais próximo para retirar o produto.</p>
+                </div>
+                <ChevronRight className="w-6 h-6 text-muted-foreground shrink-0 mt-1" />
+              </div>
+              <div className="h-px bg-border mx-5" />
+              <div className="flex items-center gap-4 px-5 py-4">
+                <button className="text-[var(--olx-purple)] font-semibold text-sm">Armários próximos</button>
+                <div className="w-px h-4 bg-border" />
+                <button className="text-[var(--olx-purple)] font-semibold text-sm">Como funciona?</button>
+              </div>
+            </button>
+          </div>
+
+          <div className="sticky bottom-0 bg-white px-6 py-4 border-t border-border flex gap-3">
+            <button
+              onClick={() => setShowDeliveryType(false)}
+              className="flex-1 border border-foreground text-foreground font-semibold rounded-full py-3.5"
+            >
+              Voltar
+            </button>
+            <button className="flex-1 bg-[var(--olx-orange)] text-white font-semibold rounded-full py-3.5">
               Continuar
             </button>
           </div>
