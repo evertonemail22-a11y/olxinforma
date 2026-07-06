@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Heart, Share2, Camera, ChevronLeft, ChevronRight, Home, User, Layers,
   ShoppingCart, MessageCircle, Star, Box, Copy, Zap, Award, Building2,
   MapPin, Calendar, CheckCircle2, XCircle, ShieldCheck, CreditCard, Truck,
-  X, Ticket, BadgePercent, Calculator, Facebook, Youtube, Info,
+  X, Ticket, BadgePercent, Calculator, Facebook, Youtube, Info, Wallet, Clock,
 } from "lucide-react";
 import iphoneHero from "@/assets/iphone-hero.jpg";
 import related1 from "@/assets/iphone-related-1.jpg";
@@ -81,6 +81,15 @@ function Index() {
     }
   };
   const isFormValid = form.nome && form.cpf && form.telefone && form.cep && form.rua && form.numero && form.bairro && form.cidade && form.estado;
+  const [showSecurity, setShowSecurity] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  useEffect(() => {
+    const hidden = localStorage.getItem("olx-security-modal-hidden");
+    if (hidden === "true") return;
+    const timer = setTimeout(() => setShowSecurity(true), 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background pb-40">
@@ -662,6 +671,65 @@ function Index() {
               Salvar endereço
             </button>
           </form>
+        </div>
+      )}
+      {showSecurity && (
+        <div className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm flex items-center justify-center p-5">
+          <div className="w-full max-w-sm bg-[#1e1e2e] rounded-3xl p-6 text-white flex flex-col">
+            <h2 className="text-center text-3xl font-bold leading-tight">
+              Compra<br />100% protegida!
+            </h2>
+
+            <div className="mt-8 space-y-6">
+              <div className="flex items-start gap-4">
+                <Wallet className="w-8 h-8 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-lg">Pagamento seguro</p>
+                  <p className="text-white/70 text-sm mt-1">Pague pelo App e proteja seu dinheiro.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <Clock className="w-8 h-8 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-lg">Garantia de entrega</p>
+                  <p className="text-white/70 text-sm mt-1">O vendedor só recebe após sua confirmação.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <ShieldCheck className="w-8 h-8 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-lg">Proteção total</p>
+                  <p className="text-white/70 text-sm mt-1">Cobertura para o produto e o frete.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 inline-flex self-start">
+              <span className="border border-white/30 text-white px-4 py-1.5 rounded-full text-sm font-semibold">
+                Garantia da OLX
+              </span>
+            </div>
+
+            <label className="mt-6 flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={dontShowAgain}
+                onChange={(e) => setDontShowAgain(e.target.checked)}
+                className="w-5 h-5 rounded border-white/40 bg-transparent accent-white"
+              />
+              <span className="text-sm text-white/90">Não mostrar essa dica novamente</span>
+            </label>
+
+            <button
+              onClick={() => {
+                if (dontShowAgain) localStorage.setItem("olx-security-modal-hidden", "true");
+                setShowSecurity(false);
+              }}
+              className="mt-6 w-full bg-white text-[#1e1e2e] font-semibold rounded-full py-4 text-base"
+            >
+              Entendi
+            </button>
+          </div>
         </div>
       )}
     </div>
