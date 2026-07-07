@@ -9,6 +9,7 @@ import {
 import iphonePhoto1 from "@/assets/iphone-photo-1.webp.asset.json";
 import iphonePhoto2 from "@/assets/iphone-photo-2.webp.asset.json";
 import iphonePhoto3 from "@/assets/iphone-photo-3.webp.asset.json";
+import olxLogo from "@/assets/olx-logo.png.asset.json";
 import related1 from "@/assets/iphone-related-1.jpg";
 import related2 from "@/assets/iphone-related-2.jpg";
 import sellerAvatar from "@/assets/seller-avatar.jpg";
@@ -97,11 +98,7 @@ function Index() {
     <div className="min-h-screen bg-background pb-40">
       {/* Top bar */}
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10">
-        <div className="flex items-center gap-1">
-          <span className="text-2xl font-black text-[var(--olx-purple)] tracking-tight">o</span>
-          <span className="text-2xl font-black text-[var(--olx-green-text)]">l</span>
-          <span className="text-2xl font-black text-[var(--olx-orange)]">x</span>
-        </div>
+        <img src={olxLogo.url} alt="OLX" className="h-7 w-auto object-contain" />
         <div className="flex items-center gap-4">
           <Heart className="w-5 h-5 stroke-[1.5]" />
           <Share2 className="w-5 h-5 stroke-[1.5]" />
