@@ -87,6 +87,7 @@ function Index() {
   const isFormValid = form.nome && form.cpf && form.telefone && form.cep && form.rua && form.numero && form.bairro && form.cidade && form.estado;
   const [showSecurity, setShowSecurity] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const hidden = localStorage.getItem("olx-security-modal-hidden");
