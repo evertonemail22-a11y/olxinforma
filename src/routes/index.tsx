@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Heart, Share2, Camera, ChevronLeft, ChevronRight, Home, User, Layers,
   ShoppingCart, MessageCircle, Star, Box, Copy, Zap, Award, Building2,
   MapPin, Calendar, CheckCircle2, XCircle, ShieldCheck, CreditCard, Truck,
   X, Ticket, BadgePercent, Calculator, Facebook, Youtube, Info, Wallet, Clock,
-  Search, SlidersHorizontal, ChevronDown, ImageIcon,
+  Search, SlidersHorizontal, ChevronDown, ImageIcon, Send, Check,
 } from "lucide-react";
 import iphonePhoto1 from "@/assets/iphone-photo-1.webp.asset.json";
 import iphonePhoto2 from "@/assets/iphone-photo-2.webp.asset.json";
@@ -88,6 +88,71 @@ function Index() {
   const [showSecurity, setShowSecurity] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [couponCopied, setCouponCopied] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showOffer, setShowOffer] = useState(false);
+  const [offerValue, setOfferValue] = useState("");
+  const [offerSent, setOfferSent] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [chatMessages, setChatMessages] = useState<{ from: "me" | "seller"; text: string; time: string }[]>([
+    { from: "seller", text: "Olá! Obrigada pelo interesse no iPhone 13 Pro 😊", time: "14:32" },
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
+  const handleCarouselScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const idx = Math.round(el.scrollLeft / el.clientWidth);
+    if (idx !== currentPhoto) setCurrentPhoto(idx);
+  };
+
+  const copyCoupon = async () => {
+    try { await navigator.clipboard.writeText("PROMO20"); } catch { /* noop */ }
+    setCouponCopied(true);
+    setTimeout(() => setCouponCopied(false), 2000);
+  };
+
+  const shareAd = async () => {
+    const data = { title: "iPhone 13 Pro 256gb", text: "iPhone 13 Pro 256gb - R$ 1.700 na OLX", url: typeof window !== "undefined" ? window.location.href : "" };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else await navigator.clipboard.writeText(data.url);
+    } catch { /* user cancelled */ }
+  };
+
+  const sendChat = (text: string) => {
+    const t = text.trim();
+    if (!t) return;
+    const now = new Date();
+    const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    setChatMessages((m) => [...m, { from: "me", text: t, time }]);
+    setChatInput("");
+    setTimeout(() => {
+      const now2 = new Date();
+      const time2 = `${String(now2.getHours()).padStart(2, "0")}:${String(now2.getMinutes()).padStart(2, "0")}`;
+      setChatMessages((m) => [...m, { from: "seller", text: "Recebi sua mensagem, respondo em instantes!", time: time2 }]);
+    }, 900);
+  };
+
+  const submitOffer = () => {
+    if (!offerValue) return;
+    setOfferSent(true);
+    setTimeout(() => { setShowOffer(false); setOfferSent(false); setOfferValue(""); }, 1600);
+  };
+
+  const finalizePurchase = () => {
+    setShowDeliveryDeadline(false);
+    setShowDeliveryType(false);
+    setShowDelivery(false);
+    setShowSuccess(true);
+  };
+
+  useEffect(() => {
+    if (showChat) chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages, showChat]);
 
   useEffect(() => {
     const hidden = localStorage.getItem("olx-security-modal-hidden");
@@ -102,14 +167,22 @@ function Index() {
       <header className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-10">
         <img src={olxLogo} alt="OLX" className="h-7 w-auto object-contain" />
         <div className="flex items-center gap-4">
-          <Heart className="w-5 h-5 stroke-[1.5]" />
-          <Share2 className="w-5 h-5 stroke-[1.5]" />
+          <button onClick={() => setFavorite((f) => !f)} aria-label="Favoritar">
+            <Heart className={`w-5 h-5 stroke-[1.5] transition ${favorite ? "fill-red-500 text-red-500" : ""}`} />
+          </button>
+          <button onClick={shareAd} aria-label="Compartilhar">
+            <Share2 className="w-5 h-5 stroke-[1.5]" />
+          </button>
         </div>
       </header>
 
       {/* Hero image carousel */}
       <div className="relative bg-muted">
-        <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none">
+        <div
+          ref={carouselRef}
+          onScroll={handleCarouselScroll}
+          className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none"
+        >
           {[iphonePhoto1, iphonePhoto2, iphonePhoto3].map((p, i) => (
             <img
               key={i}
@@ -122,9 +195,10 @@ function Index() {
           ))}
         </div>
         <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2.5 py-1.5 rounded-full flex items-center gap-1.5">
-          <Camera className="w-3.5 h-3.5" /> 1/3
+          <Camera className="w-3.5 h-3.5" /> {currentPhoto + 1}/3
         </div>
       </div>
+
 
 
       {/* Title + chips */}
@@ -160,7 +234,7 @@ function Index() {
 
       {/* Actions list */}
       <section className="px-4 pt-6 space-y-4">
-        <button className="flex items-center gap-3 text-[var(--olx-purple)] font-semibold">
+        <button onClick={() => setShowOffer(true)} className="flex items-center gap-3 text-[var(--olx-purple)] font-semibold">
           <BadgePercent className="w-5 h-5" /> Fazer oferta
         </button>
         <div className="h-px bg-border" />
@@ -180,9 +254,12 @@ function Index() {
               <p className="text-xs text-muted-foreground mt-2">*Cupons limitados.</p>
             </div>
           </div>
-          <button className="bg-[var(--olx-purple)] text-white px-6 font-semibold">Copiar</button>
+          <button onClick={copyCoupon} className="bg-[var(--olx-purple)] text-white px-6 font-semibold min-w-[92px]">
+            {couponCopied ? "Copiado!" : "Copiar"}
+          </button>
         </div>
       </section>
+
 
       {/* Shipping calc */}
       <section className="px-4 pt-6">
@@ -380,7 +457,7 @@ function Index() {
           <button onClick={() => setShowDelivery(true)} className="bg-[var(--olx-orange)] text-white font-semibold rounded-full py-3.5 flex items-center justify-center gap-2">
             <ShoppingCart className="w-5 h-5" /> Comprar
           </button>
-          <button className="bg-[var(--olx-orange-soft)] text-[var(--olx-orange)] font-semibold rounded-full py-3.5 flex items-center justify-center gap-2">
+          <button onClick={() => setShowChat(true)} className="bg-[var(--olx-orange-soft)] text-[var(--olx-orange)] font-semibold rounded-full py-3.5 flex items-center justify-center gap-2">
             <MessageCircle className="w-5 h-5" /> Chat
           </button>
         </div>
@@ -629,7 +706,7 @@ function Index() {
             >
               Voltar
             </button>
-            <button className="flex-1 bg-[var(--olx-orange)] text-white font-semibold rounded-full py-3.5">
+            <button onClick={finalizePurchase} className="flex-1 bg-[var(--olx-orange)] text-white font-semibold rounded-full py-3.5">
               Continuar
             </button>
           </div>
@@ -851,6 +928,117 @@ function Index() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {showChat && (
+        <div className="fixed inset-0 z-[75] bg-white flex flex-col">
+          <header className="flex items-center gap-3 px-4 py-3 border-b border-border">
+            <button onClick={() => setShowChat(false)} aria-label="Voltar"><ChevronLeft className="w-6 h-6" /></button>
+            <img src={sellerAvatar} alt="Petala A." className="w-10 h-10 rounded-full object-cover" />
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold truncate flex items-center gap-1.5">Petala A. <CheckCircle2 className="w-4 h-4 fill-sky-500 text-white" /></p>
+              <p className="text-xs text-muted-foreground">online agora</p>
+            </div>
+          </header>
+          <div className="px-4 py-3 border-b border-border flex items-center gap-3 bg-muted/50">
+            <img src={iphonePhoto1.url} alt="" className="w-12 h-12 rounded-lg object-cover" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">iPhone 13 Pro 256gb</p>
+              <p className="text-sm font-bold text-foreground">R$ 1.700</p>
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-[#f7f7fb]">
+            {chatMessages.map((m, i) => (
+              <div key={i} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
+                <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm ${m.from === "me" ? "bg-[var(--olx-purple)] text-white rounded-br-sm" : "bg-white border border-border text-foreground rounded-bl-sm"}`}>
+                  <p className="whitespace-pre-wrap break-words">{m.text}</p>
+                  <p className={`text-[10px] mt-1 ${m.from === "me" ? "text-white/70 text-right" : "text-muted-foreground"}`}>{m.time}</p>
+                </div>
+              </div>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
+          <form
+            onSubmit={(e) => { e.preventDefault(); sendChat(chatInput); }}
+            className="flex items-center gap-2 px-3 py-3 border-t border-border bg-white"
+          >
+            <input
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              placeholder="Escreva uma mensagem"
+              className="flex-1 px-4 py-3 rounded-full border border-border text-sm bg-muted/40"
+            />
+            <button
+              type="submit"
+              disabled={!chatInput.trim()}
+              className="w-11 h-11 rounded-full bg-[var(--olx-purple)] text-white flex items-center justify-center disabled:opacity-40"
+              aria-label="Enviar"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </form>
+        </div>
+      )}
+
+      {showOffer && (
+        <div className="fixed inset-0 z-[75] bg-black/60 flex items-end sm:items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-white rounded-t-3xl sm:rounded-3xl p-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold">Fazer oferta</h3>
+              <button onClick={() => { setShowOffer(false); setOfferSent(false); }} aria-label="Fechar"><X className="w-5 h-5" /></button>
+            </div>
+            {offerSent ? (
+              <div className="py-8 text-center">
+                <div className="w-14 h-14 rounded-full bg-[var(--olx-green-soft)] text-[var(--olx-green-text)] flex items-center justify-center mx-auto">
+                  <Check className="w-7 h-7" />
+                </div>
+                <p className="mt-4 font-semibold">Oferta enviada!</p>
+                <p className="text-sm text-muted-foreground mt-1">O vendedor será notificado.</p>
+              </div>
+            ) : (
+              <>
+                <p className="text-sm text-muted-foreground mt-2">Preço anunciado: R$ 1.700</p>
+                <div className="mt-4 flex items-center gap-2 rounded-xl border border-border px-4 py-3">
+                  <span className="text-muted-foreground">R$</span>
+                  <input
+                    value={offerValue}
+                    onChange={(e) => setOfferValue(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    inputMode="numeric"
+                    placeholder="0"
+                    className="flex-1 outline-none text-lg font-semibold"
+                    autoFocus
+                  />
+                </div>
+                <button
+                  onClick={submitOffer}
+                  disabled={!offerValue}
+                  className="w-full mt-5 bg-[var(--olx-orange)] disabled:opacity-50 text-white font-semibold rounded-full py-3.5"
+                >
+                  Enviar oferta
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div className="fixed inset-0 z-[80] bg-white flex flex-col items-center justify-center p-6 text-center">
+          <div className="w-20 h-20 rounded-full bg-[var(--olx-green-soft)] text-[var(--olx-green-text)] flex items-center justify-center">
+            <Check className="w-10 h-10" />
+          </div>
+          <h2 className="text-2xl font-bold mt-6">Pedido realizado!</h2>
+          <p className="text-muted-foreground mt-2 max-w-xs">
+            Seu iPhone 13 Pro será enviado para{" "}
+            {form.rua ? `${form.rua}, ${form.numero} - ${form.cidade}/${form.estado}` : "seu endereço"}.
+          </p>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="mt-8 bg-[var(--olx-orange)] text-white font-semibold rounded-full px-10 py-3.5"
+          >
+            Voltar ao anúncio
+          </button>
         </div>
       )}
     </div>
