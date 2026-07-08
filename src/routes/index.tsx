@@ -234,7 +234,7 @@ function Index() {
 
       {/* Actions list */}
       <section className="px-4 pt-6 space-y-4">
-        <button className="flex items-center gap-3 text-[var(--olx-purple)] font-semibold">
+        <button onClick={() => setShowOffer(true)} className="flex items-center gap-3 text-[var(--olx-purple)] font-semibold">
           <BadgePercent className="w-5 h-5" /> Fazer oferta
         </button>
         <div className="h-px bg-border" />
@@ -254,9 +254,12 @@ function Index() {
               <p className="text-xs text-muted-foreground mt-2">*Cupons limitados.</p>
             </div>
           </div>
-          <button className="bg-[var(--olx-purple)] text-white px-6 font-semibold">Copiar</button>
+          <button onClick={copyCoupon} className="bg-[var(--olx-purple)] text-white px-6 font-semibold min-w-[92px]">
+            {couponCopied ? "Copiado!" : "Copiar"}
+          </button>
         </div>
       </section>
+
 
       {/* Shipping calc */}
       <section className="px-4 pt-6">
