@@ -457,7 +457,7 @@ function Index() {
           <button onClick={() => setShowDelivery(true)} className="bg-[var(--olx-orange)] text-white font-semibold rounded-full py-3.5 flex items-center justify-center gap-2">
             <ShoppingCart className="w-5 h-5" /> Comprar
           </button>
-          <button className="bg-[var(--olx-orange-soft)] text-[var(--olx-orange)] font-semibold rounded-full py-3.5 flex items-center justify-center gap-2">
+          <button onClick={() => setShowChat(true)} className="bg-[var(--olx-orange-soft)] text-[var(--olx-orange)] font-semibold rounded-full py-3.5 flex items-center justify-center gap-2">
             <MessageCircle className="w-5 h-5" /> Chat
           </button>
         </div>
