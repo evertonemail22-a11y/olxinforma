@@ -18,7 +18,7 @@ import sellerAvatar from "@/assets/seller-avatar.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "iPhone 13 Pro 256gb - R$ 1.700 | OLX" },
+      { title: "iPhone 13 Pro 256gb - R$ 1.500 | OLX" },
       { name: "description", content: "iPhone 13 Pro 256GB azul, usado em bom estado. Frete grátis, até 10x sem juros." },
     ],
   }),
@@ -116,7 +116,7 @@ function Index() {
   };
 
   const shareAd = async () => {
-    const data = { title: "iPhone 13 Pro 256gb", text: "iPhone 13 Pro 256gb - R$ 1.700 na OLX", url: typeof window !== "undefined" ? window.location.href : "" };
+    const data = { title: "iPhone 13 Pro 256gb", text: "iPhone 13 Pro 256gb - R$ 1.500 na OLX", url: typeof window !== "undefined" ? window.location.href : "" };
     try {
       if (navigator.share) await navigator.share(data);
       else await navigator.clipboard.writeText(data.url);
@@ -214,7 +214,7 @@ function Index() {
 
       {/* Price */}
       <section className="px-4 pt-6">
-        <p className="text-4xl font-bold text-foreground">R$ 1.700</p>
+        <p className="text-4xl font-bold text-foreground">R$ 1.500</p>
         <div className="flex items-center gap-1.5 mt-3 flex-wrap">
           <span className="w-9 h-7 rounded-md flex items-center justify-center text-[10px] font-bold text-white" style={{background:"#32BCAD"}}>PIX</span>
           <span className="w-9 h-7 rounded-md flex items-center justify-center text-[10px] font-bold text-white" style={{background:"#820AD1"}}>nu</span>
@@ -319,8 +319,8 @@ function Index() {
         <h2 className="text-2xl font-semibold px-4">Também podem te interessar</h2>
         <div className="flex gap-4 overflow-x-auto px-4 pt-5 pb-2">
           {[
-            { img: related1, title: "IPHONE 13 PRO MAX", price: "R$ 1.600" },
-            { img: related2, title: "IPHONE 13 128GB ÚNICA DONA", price: "R$ 1.450" },
+            { img: related1, title: "IPHONE 13 PRO MAX", price: "R$ 2200" },
+            { img: related2, title: "IPHONE 13 128GB ÚNICA DONA", price: "R$ 2350" },
           ].map((p, i) => (
             <div key={i} className="min-w-[240px] max-w-[240px]">
               <div className="relative">
@@ -353,8 +353,8 @@ function Index() {
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                 Conta verificada <CheckCircle2 className="w-4 h-4 fill-sky-500 text-white" />
               </div>
-              <p className="text-2xl font-bold mt-1">Petala A.</p>
-              <p className="text-muted-foreground text-sm">Último acesso há 4 horas</p>
+              <p className="text-2xl font-bold mt-1">b.rodrigues.</p>
+              <p className="text-muted-foreground text-sm">Último acesso há 8 minutos</p>
             </div>
           </div>
           <div className="mt-6">
@@ -659,7 +659,7 @@ function Index() {
                   </div>
                   <div>
                     <p className="font-bold text-lg text-foreground">Padrão</p>
-                    <p className="text-muted-foreground">Até 15 dias úteis</p>
+                    <p className="text-muted-foreground">Até 10 dias úteis</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -683,7 +683,7 @@ function Index() {
                   </div>
                   <div>
                     <p className="font-bold text-lg text-foreground">Expressa</p>
-                    <p className="text-muted-foreground">Até 11 dias úteis</p>
+                    <p className="text-muted-foreground">Até 4 dias úteis</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -843,7 +843,7 @@ function Index() {
                     Conta verificada <CheckCircle2 className="w-4 h-4 fill-sky-500 text-white" />
                   </div>
                   <p className="text-2xl font-bold mt-1">Petala A.</p>
-                  <p className="text-muted-foreground text-sm">último acesso há 4 horas</p>
+                  <p className="text-muted-foreground text-sm">último acesso há 10 minutos</p>
                 </div>
               </div>
 
@@ -914,7 +914,7 @@ function Index() {
                   </div>
                 </div>
                 <div className="p-5">
-                  <p className="text-2xl font-bold text-foreground">R$ 1.700</p>
+                  <p className="text-2xl font-bold text-foreground">R$ 1.500</p>
                   <p className="mt-4 text-foreground">iPhone 13 Pro 256gb</p>
                   <div className="h-px bg-border my-5" />
                   <div className="flex items-center justify-between">
@@ -935,9 +935,9 @@ function Index() {
         <div className="fixed inset-0 z-[75] bg-white flex flex-col">
           <header className="flex items-center gap-3 px-4 py-3 border-b border-border">
             <button onClick={() => setShowChat(false)} aria-label="Voltar"><ChevronLeft className="w-6 h-6" /></button>
-            <img src={sellerAvatar} alt="Petala A." className="w-10 h-10 rounded-full object-cover" />
+            <img src={sellerAvatar} alt="b.rodrigues." className="w-10 h-10 rounded-full object-cover" />
             <div className="flex-1 min-w-0">
-              <p className="font-semibold truncate flex items-center gap-1.5">Petala A. <CheckCircle2 className="w-4 h-4 fill-sky-500 text-white" /></p>
+              <p className="font-semibold truncate flex items-center gap-1.5">b.rodrigues. <CheckCircle2 className="w-4 h-4 fill-sky-500 text-white" /></p>
               <p className="text-xs text-muted-foreground">online agora</p>
             </div>
           </header>
@@ -945,7 +945,7 @@ function Index() {
             <img src={iphonePhoto1.url} alt="" className="w-12 h-12 rounded-lg object-cover" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">iPhone 13 Pro 256gb</p>
-              <p className="text-sm font-bold text-foreground">R$ 1.700</p>
+              <p className="text-sm font-bold text-foreground">R$ 1.500</p>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-[#f7f7fb]">
@@ -998,7 +998,7 @@ function Index() {
               </div>
             ) : (
               <>
-                <p className="text-sm text-muted-foreground mt-2">Preço anunciado: R$ 1.700</p>
+                <p className="text-sm text-muted-foreground mt-2">Preço anunciado: R$ 1.500</p>
                 <div className="mt-4 flex items-center gap-2 rounded-xl border border-border px-4 py-3">
                   <span className="text-muted-foreground">R$</span>
                   <input
