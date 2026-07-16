@@ -11,7 +11,7 @@ import iphonePhoto1 from "@/assets/iphone-photo-1.webp.asset.json";
 import iphonePhoto2 from "@/assets/iphone-photo-2.webp.asset.json";
 import iphonePhoto3 from "@/assets/iphone-photo-3.webp.asset.json";
 import olxLogo from "@/assets/olx-logo-clean.png";
-import related1 from "@/assets/D_NQ_NP_827775-MLB108006206851_032026-O.webp;
+import related1 from "@/assets/D_NQ_NP_827775-MLB108006206851_032026-O.webp";
 import related2 from "@/assets/iphone-related-2.jpg";
 import sellerAvatar from "@/assets/seller-avatar.jpg";
 
@@ -318,10 +318,10 @@ function Index() {
       <section className="pt-8">
         <h2 className="text-2xl font-semibold px-4">Também podem te interessar</h2>
         <div className="flex gap-4 overflow-x-auto px-4 pt-5 pb-2">
-          {[
-            { img: related1, title : " IPHONE 13 PRO MAX " , price : " R$ 2200 " },
+          {
+  { img: related1, title : " IPHONE 13 PRO MAX " , price : " R$ 2200 " },
              title: "IPHONE 13 PRO MAX", price: "R$ 2200" },
-            { img: related2, title: "IPHONE 13 128GB ÚNICA DONA", price: "R$ 2350" },
+          { { img: related2, title: "IPHONE 13 128GB ÚNICA DONA", price: "R$ 2350" },
           ].map((p, i) => (
             <div key={i} className="min-w-[240px] max-w-[240px]">
               <div className="relative">
